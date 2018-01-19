@@ -1,0 +1,33 @@
+ /* Geogebra to Asymptote conversion, documentation at artofproblemsolving.com/Wiki, go to User:Azjps/geogebra */
+import graph; size(0cm); 
+real labelscalefactor = 0.5; /* changes label-to-point distance */
+pen dps = linewidth(0.7) + fontsize(10); defaultpen(dps); /* default pen style */ 
+pen dotstyle = black; /* point style */ 
+real xmin = -28.128683775837928, xmax = 33.737861426975925, ymin = -24.06282343472171, ymax = 23.032062076495475;  /* image dimensions */
+
+ /* draw figures */
+draw((xmin, 0.0625*xmin + 3.9716406124498573)--(xmax, 0.0625*xmax + 3.9716406124498573), linewidth(2)); /* line */
+draw((xmin, -0.125*xmin + 3.676289164744376)--(xmax, -0.125*xmax + 3.676289164744376), linewidth(2)); /* line */
+draw((xmin, -354.000000000037*xmin + 1626.5547194474916)--(xmax, -354.000000000037*xmax + 1626.5547194474916), linewidth(2)); /* line */
+draw((xmin, 61.99999999999928*xmin-367.1753811452216)--(xmax, 61.99999999999928*xmax-367.1753811452216), linewidth(2)); /* line */
+ /* dots and labels */
+dot((0,0),dotstyle); 
+label("$A$", (0.21546028183890456,0.5202707383789283), NE * labelscalefactor); 
+dot((10,0),dotstyle); 
+label("$B$", (10.244926640709169,0.5202707383789283), NE * labelscalefactor); 
+dot((0,7.5),dotstyle); 
+label("$C$", (0.21546028183890456,8.042370507531674), NE * labelscalefactor); 
+dot((4.586021703377117,3.1030364518222378),dotstyle); 
+label("$D$", (4.794129706540547,3.627224990855062), NE * labelscalefactor); 
+dot((5.969443385271149,2.930108741585484),dotstyle); 
+label("$E$", (6.211336909424388,3.4637010828300023), NE * labelscalefactor); 
+dot((5.992282894170343,4.346158293335506),dotstyle); 
+label("$F$", (6.211336909424388,4.880908285713853), NE * labelscalefactor); 
+dot((4.582758916391518,4.258063044724329),dotstyle); 
+label("$G$", (4.794129706540547,4.826400316372166), NE * labelscalefactor); 
+dot((-1.5752077210958975,3.873190129881363),dotstyle); 
+label("$H$", (-1.3652708290699958,4.444844530980361), NE * labelscalefactor); 
+dot((4.792620434116681,-70.03291422999078),dotstyle); 
+label("$I$", (6.810924572182937,-23.73577561867159), NE * labelscalefactor); 
+clip((xmin,ymin)--(xmin,ymax)--(xmax,ymax)--(xmax,ymin)--cycle); 
+ /* end of picture */
