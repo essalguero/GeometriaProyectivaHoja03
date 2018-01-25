@@ -66,25 +66,25 @@ MHomografia = GenerarHomografia(MatrizOriginal, MatrizReferencias)
 MHomografia = inv(MHomografia);
 
 Punto1 = MHomografia * [1, 1, 1]';
-Punto1 = Punto1 / Punto1(3);
+Punto1 = Punto1 / Punto1(3)
 Punto2 = MHomografia * [1, columnas, 1]';
-Punto2 = Punto2 / Punto2(3);
+Punto2 = Punto2 / Punto2(3)
 Punto3 = MHomografia * [filas, 1, 1]';
-Punto3 = Punto3 / Punto3(3);
+Punto3 = Punto3 / Punto3(3)
 Punto4 = MHomografia * [filas, columnas, 1]';
-Punto4 = Punto4 / Punto4(3);
+Punto4 = Punto4 / Punto4(3)
 
-minCoord = [min(Punto1(1),Punto2(1)) min(Punto1(2), Punto3(2))];
-maxCoord = [max(Punto4(1),Punto3(1)) max(Punto4(2), Punto2(2))];
+minCoord = [max(Punto1(1),Punto2(1)) max(Punto1(2), Punto3(2))] - [1 1];
+maxCoord = [min(Punto4(1),Punto3(1)) min(Punto4(2), Punto2(2))] + [1 1];
 
-relCoords = (maxCoord - minCoord) ./ [filas columnas] ;
+relCoords = [filas columnas] ./ (maxCoord - minCoord)   ;
 
 for i = [1:filas]
   for j = [1:columnas]
 
     result = MHomografia * [i, j, 1]';
     result = result / result(3);
-    
+    result = ((result  - [minCoord 1]').* [relCoords 1]');
     %result = ((result - [minCoord 1]') .* [relCoords 1]') + [1, 1, 0];
     %resultImage(floor(result(1)), floor(result(2))) = img(i, j);
 %    xImg = max(min(floor(result(1)), filas), 1);
@@ -95,7 +95,6 @@ for i = [1:filas]
     if !(round(result(1)) < 1 || round(result(1)) > filas) && ...
       !(round(result(2)) < 1 || round(result(2)) > columnas)
       resultImage(i,j) = img(round(result(1)), round(result(2)));
-      %resultImage(round(result(1)), round(result(2))) = img(i, j);
     else
       result;
     endif
