@@ -1,0 +1,42 @@
+\documentclass[10pt]{article}
+\usepackage{pgf,tikz}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\pagestyle{empty}
+\begin{document}
+\definecolor{rvwvcq}{rgb}{0.08235294117647059,0.396078431372549,0.7529411764705882}
+\definecolor{cqcqcq}{rgb}{0.7529411764705882,0.7529411764705882,0.7529411764705882}
+\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1cm,y=1cm]
+\draw [color=cqcqcq,, xstep=1cm,ystep=1cm] (-1.044456451257842,-0.40040428611947676) grid (15.225092634501992,8.787485058876996);
+\draw[->,color=black] (-1.044456451257842,0) -- (15.225092634501992,0);
+\foreach \x in {-1,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}
+\draw[shift={(\x,0)},color=black] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+\draw[->,color=black] (0,-0.40040428611947676) -- (0,8.787485058876996);
+\foreach \y in {,1,2,3,4,5,6,7,8}
+\draw[shift={(0,\y)},color=black] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+\draw[color=black] (0pt,-10pt) node[right] {\footnotesize $0$};
+\clip(-1.044456451257842,-0.40040428611947676) rectangle (15.225092634501992,8.787485058876996);
+\begin{scriptsize}
+\draw [fill=rvwvcq] (0,0) circle (2.5pt);
+\draw[color=rvwvcq] (0.08388083672418081,0.22824077432765028) node {$A$};
+\draw [fill=rvwvcq] (12.1968,0) circle (2.5pt);
+\draw[color=rvwvcq] (12.280669616339381,0.22824077432765028) node {$B$};
+\draw [fill=rvwvcq] (0.7393910706946893,3.0275918554640024) circle (2.5pt);
+\draw[color=rvwvcq] (0.8253596259695102,3.2586323477650834) node {$C$};
+\draw [fill=rvwvcq] (0.9220742506536835,3.382212145972638) circle (2.5pt);
+\draw[color=rvwvcq] (1.0080428059285043,3.6132526382737193) node {$D$};
+\draw [fill=rvwvcq] (0.15910332258964902,3.6616099506158055) circle (2.5pt);
+\draw[color=rvwvcq] (0.2450718778644698,3.892650442916887) node {$E$};
+\draw [fill=rvwvcq] (0.6211843071918107,4.005484171715089) circle (2.5pt);
+\draw[color=rvwvcq] (0.7071528624666316,4.236524664016169) node {$F$};
+\draw [fill=rvwvcq] (5.886758317774585,6.294396955907192) circle (2.5pt);
+\draw[color=rvwvcq] (5.972726873049405,6.525437448208273) node {$G$};
+\draw [fill=rvwvcq] (6.767936009341497,8.282419796637424) circle (2.5pt);
+\draw[color=rvwvcq] (6.853904564616318,8.513460288938504) node {$H$};
+\draw [fill=rvwvcq] (4.532753572196157,6.219174470041724) circle (2.5pt);
+\draw[color=rvwvcq] (4.618722127470978,6.4502149623428044) node {$I$};
+\draw [fill=rvwvcq] (6.73569780111344,5.069345043240996) circle (2.5pt);
+\draw[color=rvwvcq] (6.821666356388261,5.300385535542077) node {$J$};
+\end{scriptsize}
+\end{tikzpicture}
+\end{document}
