@@ -4,7 +4,27 @@ clc;
 
 AnchoImagen = 10;
 AltoImagen = 7.56;
+imgDch = imread('./IMG_4908.JPG');
+imgIzq = imread('./IMG_4906.JPG');
+imgCent = imread('./IMG_4907.JPG');
+[filas columnas color] = size(imgIzq);
 
+relacionEjeX = columnas / AnchoImagen;
+relacionEjeY = filas / AltoImagen;
+
+resultImage = zeros(filas, columnas*3, color);
+
+% Dibujar imagen central
+for i = [1:filas]
+    for j  = [1: columnas]
+      for k  = [1: color]
+        resultImage(i, columnas + j, k) = imgCent(i, j, k);
+      end
+    end
+end
+
+% Lado Izquierdo
+% Puntos foto izquierda
 PuntoD_X = 8.276038406570354;
 PuntoD_Y = 1.357851066730977;
 
@@ -16,20 +36,6 @@ PuntoF_Y = 6.931510836655059;
 
 PuntoG_X = 6.298618672020083;
 PuntoG_Y = 7.310601666594749;
-
-img = CargarImagen('./ImagenIzq_GrayScale_Resized.JPG');
-figure;
-imshow(img);
-
-filas = rows(img);
-columnas = columns(img);
-
-relacionEjeX = columnas / AnchoImagen;
-relacionEjeY = filas / AltoImagen;
-
-
-
-resultImage = zeros(filas, columnas);
 
 ColumnaPuntoD = relacionEjeX * PuntoD_X;
 FilaPuntoD = filas - (relacionEjeY  * PuntoD_Y);
@@ -43,15 +49,12 @@ FilaPuntoF = filas - (relacionEjeY  * PuntoF_Y);
 ColumnaPuntoG = relacionEjeX * PuntoG_X;
 FilaPuntoG = filas - (relacionEjeY  * PuntoG_Y);
 
-MatrizOriginal = [FilaPuntoD,ColumnaPuntoD;
-FilaPuntoE,ColumnaPuntoE;FilaPuntoF,ColumnaPuntoF;FilaPuntoG,ColumnaPuntoG];
-
-
-
-
-AnchoImagen_2 = 10;
-AltoImagen_2 = 7.56;
-
+MatrizOriginal = [FilaPuntoD, ColumnaPuntoD;
+                  FilaPuntoE, ColumnaPuntoE;
+                  FilaPuntoF, ColumnaPuntoF;
+                  FilaPuntoG, ColumnaPuntoG];
+                  
+% Puntos foto central
 PuntoD_X_2 = 3.3796289056830053;
 PuntoD_Y_2 = 1.306151157064555;
 
@@ -64,47 +67,30 @@ PuntoF_Y_2 = 6.54813623479753;
 PuntoG_X_2 = 1.3114275204683599;
 PuntoG_Y_2 = 7.272483263720632;
 
-img_2 = CargarImagen('./ImagenCen_GrayScale_Resized.JPG');
-figure;
-imshow(img_2)
+ColumnaPuntoD_2 = relacionEjeX * PuntoD_X_2;
+FilaPuntoD_2 = filas - (relacionEjeY  * PuntoD_Y_2);
 
-filas_2 = rows(img_2);
-columnas_2 = columns(img_2);
+ColumnaPuntoE_2 = relacionEjeX * PuntoE_X_2;
+FilaPuntoE_2 = filas - (relacionEjeY  * PuntoE_Y_2);
 
-relacionEjeX_2 = columnas_2 / AnchoImagen_2;
-relacionEjeY_2 = filas_2 / AltoImagen_2;
+ColumnaPuntoF_2 = relacionEjeX * PuntoF_X_2;
+FilaPuntoF_2 = filas - (relacionEjeY  * PuntoF_Y_2);
 
-
-
-resultImage_2 = zeros(filas_2, columnas_2);
-
-ColumnaPuntoD_2 = relacionEjeX_2 * PuntoD_X_2;
-FilaPuntoD_2 = filas_2 - (relacionEjeY_2  * PuntoD_Y_2);
-
-ColumnaPuntoE_2 = relacionEjeX_2 * PuntoE_X_2;
-FilaPuntoE_2 = filas_2 - (relacionEjeY_2  * PuntoE_Y_2);
-
-ColumnaPuntoF_2 = relacionEjeX_2 * PuntoF_X_2;
-FilaPuntoF_2 = filas_2 - (relacionEjeY_2  * PuntoF_Y_2);
-
-ColumnaPuntoG_2 = relacionEjeX_2 * PuntoG_X_2;
-FilaPuntoG_2 = filas_2 - (relacionEjeY_2  * PuntoG_Y_2);
-
+ColumnaPuntoG_2 = relacionEjeX * PuntoG_X_2;
+FilaPuntoG_2 = filas - (relacionEjeY  * PuntoG_Y_2);
 
 AjustePuntoE_Fila_2 = FilaPuntoD_2;
-AjustePuntoE_Columna_2 = ColumnaPuntoE_2;
+AjustePuntoE_Columna = ColumnaPuntoE_2;
 
 AjustePuntoF_Fila_2 = FilaPuntoG_2;
-AjustePuntoF_Columna_2 = ColumnaPuntoF_2;
+AjustePuntoF_Columna = ColumnaPuntoF_2;
 
-
-
-MatrizReferencias = [FilaPuntoD_2,ColumnaPuntoD_2;
-FilaPuntoE_2,ColumnaPuntoE_2;FilaPuntoF_2,ColumnaPuntoF_2;FilaPuntoG_2,ColumnaPuntoG_2];
-
+MatrizReferencias = [FilaPuntoD_2, ColumnaPuntoD_2;
+                     FilaPuntoE_2, ColumnaPuntoE_2;
+                     FilaPuntoF_2, ColumnaPuntoF_2;
+                     FilaPuntoG_2, ColumnaPuntoG_2];
 
 MHomografia = GenerarHomografia(MatrizOriginal, MatrizReferencias);
-
 MHomografia = inv(MHomografia);
 
 Punto1 = MHomografia * [1, 1, 1]';
@@ -116,88 +102,27 @@ Punto3 = Punto3 / Punto3(3);
 Punto4 = MHomografia * [filas, columnas, 1]';
 Punto4 = Punto4 / Punto4(3);
 
-minCoord = [max(Punto1(1),Punto2(1)) max(Punto1(2), Punto3(2))];% - [1 1];
-maxCoord = [min(Punto4(1),Punto3(1)) min(Punto4(2), Punto2(2))];% + [1 1];
+minCoord = [max(Punto1(1),Punto2(1)) max(Punto1(2), Punto3(2))];
+maxCoord = [min(Punto4(1),Punto3(1)) min(Punto4(2), Punto2(2))];
 
-relCoords = [filas columnas] ./ (maxCoord - minCoord)   ;
+relCoords = [filas columnas] ./ (maxCoord - minCoord);
 
 for i = [1:filas]
   for j = [1:columnas]
-
     result = MHomografia * [i, j, 1]';
     result = result / result(3);
     result = ((result  - [minCoord 1]').* [relCoords 1]');
-    %result = ((result - [minCoord 1]') .* [relCoords 1]') + [1, 1, 0];
-    %resultImage(floor(result(1)), floor(result(2))) = img(i, j);
-%    xImg = max(min(floor(result(1)), filas), 1);
-%    yImg = max(min(floor(result(2)), columnas), 1);
-    
-    %resultImage(i,j) = img(xImg, yImg);
-    
     if !(round(result(1)) < 1 || round(result(1)) > filas) && ...
       !(round(result(2)) < 1 || round(result(2)) > columnas)
-      resultImage(i,j) = img(round(result(1)), round(result(2)));
-    else
-      result;
+      for k = [1:color]
+        resultImage(i, j, k) = imgIzq(round(result(1)), round(result(2)), k);
+      end
     endif
   end
 end
 
-figure;
-imshow(uint8(resultImage));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-AnchoImagen_3 = 10;
-AltoImagen_3 = 7.56;
-
+% Lado Derecho
+% Puntos foto derecha
 PuntoD_X_3 = 5.886758317774585;
 PuntoD_Y_3 = 6.294396955907192;
 
@@ -210,39 +135,24 @@ PuntoF_Y_3 = 6.219174470041724;
 PuntoG_X_3 = 6.73569780111344;
 PuntoG_Y_3 = 5.069345043240996;
 
-img_3 = CargarImagen('./ImagenDer_GrayScale_Resized.JPG');
-figure
-imshow(img_3)
+ColumnaPuntoD_3 = relacionEjeX * PuntoD_X_3;
+FilaPuntoD_3 = filas - (relacionEjeY  * PuntoD_Y_3);
 
-filas_3 = rows(img_3);
-columnas_3 = columns(img_3);
+ColumnaPuntoE_3 = relacionEjeX * PuntoE_X_3;
+FilaPuntoE_3 = filas - (relacionEjeY  * PuntoE_Y_3);
 
-relacionEjeX_3 = columnas_3 / AnchoImagen_3;
-relacionEjeY_3 = filas_3 / AltoImagen_3;
+ColumnaPuntoF_3 = relacionEjeX * PuntoF_X_3;
+FilaPuntoF_3 = filas - (relacionEjeY  * PuntoF_Y_3);
 
-resultImage_3 = zeros(filas_3, columnas_3);
+ColumnaPuntoG_3 = relacionEjeX * PuntoG_X_3;
+FilaPuntoG_3 = filas - (relacionEjeY  * PuntoG_Y_3);
 
-ColumnaPuntoD_3 = relacionEjeX_3 * PuntoD_X_3;
-FilaPuntoD_3 = filas_3 - (relacionEjeY_3  * PuntoD_Y_3);
-
-ColumnaPuntoE_3 = relacionEjeX_3 * PuntoE_X_3;
-FilaPuntoE_3 = filas_3 - (relacionEjeY_3  * PuntoE_Y_3);
-
-ColumnaPuntoF_3 = relacionEjeX_3 * PuntoF_X_3;
-FilaPuntoF_3 = filas_3 - (relacionEjeY_3  * PuntoF_Y_3);
-
-ColumnaPuntoG_3 = relacionEjeX_3 * PuntoG_X_3;
-FilaPuntoG_3 = filas_3 - (relacionEjeY_3  * PuntoG_Y_3);
-
-MatrizOriginal = [FilaPuntoD_3,ColumnaPuntoD_3;
-FilaPuntoE_3,ColumnaPuntoE_3;FilaPuntoF_3,ColumnaPuntoF_3;FilaPuntoG_3,ColumnaPuntoG_3];
-
-
-
-
-AnchoImagen_4 = 10;
-AltoImagen_4 = 7.56;
-
+MatrizOriginal = [FilaPuntoD_3, ColumnaPuntoD_3;
+                  FilaPuntoE_3, ColumnaPuntoE_3;
+                  FilaPuntoF_3, ColumnaPuntoF_3;
+                  FilaPuntoG_3, ColumnaPuntoG_3];
+                  
+% Puntos foto central
 PuntoD_X_4 = 8.755046330849181;
 PuntoD_Y_4 = 5.280528934182102;
 
@@ -255,48 +165,30 @@ PuntoF_Y_4 = 5.118503940870355;
 PuntoG_X_4 = 9.670010998962573;
 PuntoG_Y_4 = 4.194008390797449;
 
+ColumnaPuntoD_4 = relacionEjeX * PuntoD_X_4;
+FilaPuntoD_4 = filas - (relacionEjeY  * PuntoD_Y_4);
 
-img_4 = CargarImagen('./ImagenCen_GrayScale_Resized.JPG');
-figure;
-imshow(img_4);
+ColumnaPuntoE_4 = relacionEjeX * PuntoE_X_4;
+FilaPuntoE_4 = filas - (relacionEjeY  * PuntoE_Y_4);
 
-filas_4 = rows(img_4);
-columnas_4 = columns(img_4);
+ColumnaPuntoF_4 = relacionEjeX * PuntoF_X_4;
+FilaPuntoF_4 = filas - (relacionEjeY  * PuntoF_Y_4);
 
-relacionEjeX_4 = columnas_4 / AnchoImagen_4;
-relacionEjeY_4 = filas_4 / AltoImagen_4;
-
-
-
-resultImage_4 = zeros(filas_4, columnas_4);
-
-ColumnaPuntoD_4 = relacionEjeX_4 * PuntoD_X_4;
-FilaPuntoD_4 = filas_4 - (relacionEjeY_4  * PuntoD_Y_4);
-
-ColumnaPuntoE_4 = relacionEjeX_4 * PuntoE_X_4;
-FilaPuntoE_4 = filas_4 - (relacionEjeY_4  * PuntoE_Y_4);
-
-ColumnaPuntoF_4 = relacionEjeX_4 * PuntoF_X_4;
-FilaPuntoF_4 = filas_4 - (relacionEjeY_4  * PuntoF_Y_4);
-
-ColumnaPuntoG_4 = relacionEjeX_4 * PuntoG_X_4;
-FilaPuntoG_4 = filas_4 - (relacionEjeY_4  * PuntoG_Y_4);
-
+ColumnaPuntoG_4 = relacionEjeX * PuntoG_X_4;
+FilaPuntoG_4 = filas - (relacionEjeY  * PuntoG_Y_4);
 
 AjustePuntoE_Fila_4 = FilaPuntoD_4;
-AjustePuntoE_Columna_4 = ColumnaPuntoE_4;
+AjustePuntoE_Columna = ColumnaPuntoE_4;
 
 AjustePuntoF_Fila_4 = FilaPuntoG_4;
-AjustePuntoF_Columna_4 = ColumnaPuntoF_4;
+AjustePuntoF_Columna = ColumnaPuntoF_4;
 
-
-
-MatrizReferencias = [FilaPuntoD_4,ColumnaPuntoD_4;
-FilaPuntoE_4,ColumnaPuntoE_4;FilaPuntoF_4,ColumnaPuntoF_4;FilaPuntoG_4,ColumnaPuntoG_4];
-
+MatrizReferencias = [FilaPuntoD_4, ColumnaPuntoD_4;
+                     FilaPuntoE_4, ColumnaPuntoE_4;
+                     FilaPuntoF_4, ColumnaPuntoF_4;
+                     FilaPuntoG_4, ColumnaPuntoG_4];
 
 MHomografia = GenerarHomografia(MatrizOriginal, MatrizReferencias);
-
 MHomografia = inv(MHomografia);
 
 Punto1 = MHomografia * [1, 1, 1]';
@@ -308,10 +200,10 @@ Punto3 = Punto3 / Punto3(3);
 Punto4 = MHomografia * [filas, columnas, 1]';
 Punto4 = Punto4 / Punto4(3);
 
-minCoord = [max(Punto1(1),Punto2(1)) max(Punto1(2), Punto3(2))];% - [1 1];
-maxCoord = [min(Punto4(1),Punto3(1)) min(Punto4(2), Punto2(2))];% + [1 1];
+minCoord = [max(Punto1(1),Punto2(1)) max(Punto1(2), Punto3(2))];
+maxCoord = [min(Punto4(1),Punto3(1)) min(Punto4(2), Punto2(2))];
 
-relCoords = [filas columnas] ./ (maxCoord - minCoord)   ;
+relCoords = [filas columnas] ./ (maxCoord - minCoord);
 
 for i = [1:filas]
   for j = [1:columnas]
@@ -319,20 +211,14 @@ for i = [1:filas]
     result = MHomografia * [i, j, 1]';
     result = result / result(3);
     result = ((result  - [minCoord 1]').* [relCoords 1]');
-    %result = ((result - [minCoord 1]') .* [relCoords 1]') + [1, 1, 0];
-    %resultImage(floor(result(1)), floor(result(2))) = img(i, j);
-%    xImg = max(min(floor(result(1)), filas), 1);
-%    yImg = max(min(floor(result(2)), columnas), 1);
-    
-    %resultImage(i,j) = img(xImg, yImg);
-    
     if !(round(result(1)) < 1 || round(result(1)) > filas) && ...
       !(round(result(2)) < 1 || round(result(2)) > columnas)
-      resultImage_4(i,j) = img_3(round(result(1)), round(result(2)));
-    else
-      result;
+      for k = [1:color]
+        resultImage(i, columnas * 2 + j, k) = imgDch(round(result(1)), round(result(2)), k);
+      end
     endif
   end
 end
 
-imshow(uint8(resultImage_4));
+figure;
+imshow(uint8(resultImage));
