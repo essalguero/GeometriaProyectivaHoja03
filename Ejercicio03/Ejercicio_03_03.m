@@ -15,13 +15,7 @@ relacionEjeY = filas / AltoImagen;
 resultImage = zeros(filas, columnas*3, color);
 
 % Dibujar imagen central
-for i = [1:filas]
-    for j  = [1: columnas]
-      for k  = [1: color]
-        resultImage(i, columnas + j, k) = imgCent(i, j, k);
-      end
-    end
-end
+resultImage(:, columnas : columnas*2-1, :) = imgCent(:,:,:);
 
 % Lado Izquierdo
 % Puntos foto izquierda
@@ -79,12 +73,6 @@ FilaPuntoF_2 = filas - (relacionEjeY  * PuntoF_Y_2);
 ColumnaPuntoG_2 = relacionEjeX * PuntoG_X_2;
 FilaPuntoG_2 = filas - (relacionEjeY  * PuntoG_Y_2);
 
-AjustePuntoE_Fila_2 = FilaPuntoD_2;
-AjustePuntoE_Columna = ColumnaPuntoE_2;
-
-AjustePuntoF_Fila_2 = FilaPuntoG_2;
-AjustePuntoF_Columna = ColumnaPuntoF_2;
-
 MatrizReferencias = [FilaPuntoD_2, ColumnaPuntoD_2;
                      FilaPuntoE_2, ColumnaPuntoE_2;
                      FilaPuntoF_2, ColumnaPuntoF_2;
@@ -93,47 +81,34 @@ MatrizReferencias = [FilaPuntoD_2, ColumnaPuntoD_2;
 MHomografia = GenerarHomografia(MatrizOriginal, MatrizReferencias);
 MHomografia = inv(MHomografia);
 
-Punto1 = MHomografia * [1, 1, 1]';
-Punto1 = Punto1 / Punto1(3);
-Punto2 = MHomografia * [1, columnas, 1]';
-Punto2 = Punto2 / Punto2(3);
-Punto3 = MHomografia * [filas, 1, 1]';
-Punto3 = Punto3 / Punto3(3);
-Punto4 = MHomografia * [filas, columnas, 1]';
-Punto4 = Punto4 / Punto4(3);
-
-minCoord = [max(Punto1(1),Punto2(1)) max(Punto1(2), Punto3(2))];
-maxCoord = [min(Punto4(1),Punto3(1)) min(Punto4(2), Punto2(2))];
-
-relCoords = [filas columnas] ./ (maxCoord - minCoord);
-
 for i = [1:filas]
-  for j = [1:columnas]
+  for j = [1:columnas*3]
     result = MHomografia * [i, j, 1]';
     result = result / result(3);
-    result = ((result  - [minCoord 1]').* [relCoords 1]');
+    
     if !(round(result(1)) < 1 || round(result(1)) > filas) && ...
       !(round(result(2)) < 1 || round(result(2)) > columnas)
       for k = [1:color]
-        resultImage(i, j, k) = imgIzq(round(result(1)), round(result(2)), k);
+        resultImage(i, j + columnas, k) = imgIzq(round(result(1)), round(result(2)), k);
       end
     endif
+    
   end
 end
 
 % Lado Derecho
 % Puntos foto derecha
-PuntoD_X_3 = 5.886758317774585;
-PuntoD_Y_3 = 6.294396955907192;
+PuntoD_X_3 = 0.63;
+PuntoD_Y_3 = 7.46;
 
-PuntoE_X_3 = 6.767936009341497;
-PuntoE_Y_3 = 8.282419796637424;
+PuntoE_X_3 = 2.17;
+PuntoE_Y_3 = 1.44;
 
-PuntoF_X_3 = 4.532753572196157;
-PuntoF_Y_3 = 6.219174470041724;
+PuntoF_X_3 = 3.82;
+PuntoF_Y_3 = 5.32;
 
-PuntoG_X_3 = 6.73569780111344;
-PuntoG_Y_3 = 5.069345043240996;
+PuntoG_X_3 = 5.49;
+PuntoG_Y_3 = 1.79;
 
 ColumnaPuntoD_3 = relacionEjeX * PuntoD_X_3;
 FilaPuntoD_3 = filas - (relacionEjeY  * PuntoD_Y_3);
@@ -153,17 +128,17 @@ MatrizOriginal = [FilaPuntoD_3, ColumnaPuntoD_3;
                   FilaPuntoG_3, ColumnaPuntoG_3];
                   
 % Puntos foto central
-PuntoD_X_4 = 8.755046330849181;
-PuntoD_Y_4 = 5.280528934182102;
+PuntoD_X_4 = 4.58;
+PuntoD_Y_4 = 6.98;
 
-PuntoE_X_4 = 9.64141835308403;
-PuntoE_Y_4 = 7.215297971963546;
+PuntoE_X_4 = 5.94;
+PuntoE_Y_4 = 1.43;
 
-PuntoF_X_4 = 7.449315502395696;
-PuntoF_Y_4 = 5.118503940870355;
+PuntoF_X_4 = 7.5;
+PuntoF_Y_4 = 5.3;
 
-PuntoG_X_4 = 9.670010998962573;
-PuntoG_Y_4 = 4.194008390797449;
+PuntoG_X_4 = 9.55;
+PuntoG_Y_4 = 1.43;
 
 ColumnaPuntoD_4 = relacionEjeX * PuntoD_X_4;
 FilaPuntoD_4 = filas - (relacionEjeY  * PuntoD_Y_4);
@@ -177,12 +152,6 @@ FilaPuntoF_4 = filas - (relacionEjeY  * PuntoF_Y_4);
 ColumnaPuntoG_4 = relacionEjeX * PuntoG_X_4;
 FilaPuntoG_4 = filas - (relacionEjeY  * PuntoG_Y_4);
 
-AjustePuntoE_Fila_4 = FilaPuntoD_4;
-AjustePuntoE_Columna = ColumnaPuntoE_4;
-
-AjustePuntoF_Fila_4 = FilaPuntoG_4;
-AjustePuntoF_Columna = ColumnaPuntoF_4;
-
 MatrizReferencias = [FilaPuntoD_4, ColumnaPuntoD_4;
                      FilaPuntoE_4, ColumnaPuntoE_4;
                      FilaPuntoF_4, ColumnaPuntoF_4;
@@ -191,30 +160,16 @@ MatrizReferencias = [FilaPuntoD_4, ColumnaPuntoD_4;
 MHomografia = GenerarHomografia(MatrizOriginal, MatrizReferencias);
 MHomografia = inv(MHomografia);
 
-Punto1 = MHomografia * [1, 1, 1]';
-Punto1 = Punto1 / Punto1(3);
-Punto2 = MHomografia * [1, columnas, 1]';
-Punto2 = Punto2 / Punto2(3);
-Punto3 = MHomografia * [filas, 1, 1]';
-Punto3 = Punto3 / Punto3(3);
-Punto4 = MHomografia * [filas, columnas, 1]';
-Punto4 = Punto4 / Punto4(3);
-
-minCoord = [max(Punto1(1),Punto2(1)) max(Punto1(2), Punto3(2))];
-maxCoord = [min(Punto4(1),Punto3(1)) min(Punto4(2), Punto2(2))];
-
-relCoords = [filas columnas] ./ (maxCoord - minCoord);
-
 for i = [1:filas]
-  for j = [1:columnas]
+  for j = [1:columnas*3]
 
     result = MHomografia * [i, j, 1]';
     result = result / result(3);
-    result = ((result  - [minCoord 1]').* [relCoords 1]');
+
     if !(round(result(1)) < 1 || round(result(1)) > filas) && ...
       !(round(result(2)) < 1 || round(result(2)) > columnas)
       for k = [1:color]
-        resultImage(i, columnas * 2 + j, k) = imgDch(round(result(1)), round(result(2)), k);
+        resultImage(i, j + columnas, k) = imgDch(round(result(1)), round(result(2)), k);
       end
     endif
   end
@@ -222,3 +177,4 @@ end
 
 figure;
 imshow(uint8(resultImage));
+imwrite(uint8(resultImage), "out.jpg");
