@@ -98,17 +98,17 @@ end
 
 % Lado Derecho
 % Puntos foto derecha
-PuntoD_X_3 = 5.886758317774585;
-PuntoD_Y_3 = 6.294396955907192;
+PuntoD_X_3 = 0.63;
+PuntoD_Y_3 = 7.46;
 
-PuntoE_X_3 = 6.767936009341497;
-PuntoE_Y_3 = 8.282419796637424;
+PuntoE_X_3 = 2.17;
+PuntoE_Y_3 = 1.44;
 
-PuntoF_X_3 = 4.532753572196157;
-PuntoF_Y_3 = 6.219174470041724;
+PuntoF_X_3 = 3.82;
+PuntoF_Y_3 = 5.32;
 
-PuntoG_X_3 = 6.73569780111344;
-PuntoG_Y_3 = 5.069345043240996;
+PuntoG_X_3 = 5.49;
+PuntoG_Y_3 = 1.79;
 
 ColumnaPuntoD_3 = relacionEjeX * PuntoD_X_3;
 FilaPuntoD_3 = filas - (relacionEjeY  * PuntoD_Y_3);
@@ -128,17 +128,17 @@ MatrizOriginal = [FilaPuntoD_3, ColumnaPuntoD_3;
                   FilaPuntoG_3, ColumnaPuntoG_3];
                   
 % Puntos foto central
-PuntoD_X_4 = 8.755046330849181;
-PuntoD_Y_4 = 5.280528934182102;
+PuntoD_X_4 = 4.58;
+PuntoD_Y_4 = 6.98;
 
-PuntoE_X_4 = 9.64141835308403;
-PuntoE_Y_4 = 7.215297971963546;
+PuntoE_X_4 = 5.94;
+PuntoE_Y_4 = 1.43;
 
-PuntoF_X_4 = 7.449315502395696;
-PuntoF_Y_4 = 5.118503940870355;
+PuntoF_X_4 = 7.5;
+PuntoF_Y_4 = 5.3;
 
-PuntoG_X_4 = 9.670010998962573;
-PuntoG_Y_4 = 4.194008390797449;
+PuntoG_X_4 = 9.55;
+PuntoG_Y_4 = 1.43;
 
 ColumnaPuntoD_4 = relacionEjeX * PuntoD_X_4;
 FilaPuntoD_4 = filas - (relacionEjeY  * PuntoD_Y_4);
@@ -166,10 +166,10 @@ for i = [1:filas]
     result = MHomografia * [i, j, 1]';
     result = result / result(3);
 
-    if !(round(result(1))+50 < 1 || round(result(1))+50 > filas) && ...
-      !(round(result(2))-20 < 1 || round(result(2))-20 > columnas)
+    if !(round(result(1)) < 1 || round(result(1)) > filas) && ...
+      !(round(result(2)) < 1 || round(result(2)) > columnas)
       for k = [1:color]
-        resultImage(i, j + columnas, k) = imgDch(round(result(1))+50, round(result(2))-20, k);
+        resultImage(i, j + columnas, k) = imgDch(round(result(1)), round(result(2)), k);
       end
     endif
   end
