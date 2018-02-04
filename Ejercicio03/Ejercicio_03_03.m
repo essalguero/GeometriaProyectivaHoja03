@@ -15,15 +15,6 @@ relacionEjeY = filas / AltoImagen;
 resultImage = zeros(filas, columnas*3, color);
 
 % Dibujar imagen central
-%{
-for i = [1:filas]
-    for j  = [1: columnas]
-      for k  = [1: color]
-        resultImage(i, columnas + j, k) = imgCent(i, j, k);
-      end
-    end
-end
-%}
 resultImage(:, columnas : columnas*2-1, :) = imgCent(:,:,:);
 
 % Lado Izquierdo
@@ -90,31 +81,10 @@ MatrizReferencias = [FilaPuntoD_2, ColumnaPuntoD_2;
 MHomografia = GenerarHomografia(MatrizOriginal, MatrizReferencias);
 MHomografia = inv(MHomografia);
 
-%{
-Punto1 = MHomografia * [1, 1, 1]';
-Punto1 = Punto1 / Punto1(3);
-Punto2 = MHomografia * [1, columnas, 1]';
-Punto2 = Punto2 / Punto2(3);
-Punto3 = MHomografia * [filas, 1, 1]';
-Punto3 = Punto3 / Punto3(3);
-Punto4 = MHomografia * [filas, columnas, 1]';
-Punto4 = Punto4 / Punto4(3);
-
-minCoord = [max(Punto1(1),Punto2(1)) max(Punto1(2), Punto3(2))];
-maxCoord = [min(Punto4(1),Punto3(1)) min(Punto4(2), Punto2(2))];
-
-relCoords = [filas columnas] ./ (maxCoord - minCoord);
-%}
-
 for i = [1:filas]
   for j = [1:columnas*3]
     result = MHomografia * [i, j, 1]';
     result = result / result(3);
-    
-    %result(2) = result(2) - columnas;
-    
-    %result = ((result  - [minCoord 1]').* [relCoords 1]');
-    
     
     if !(round(result(1)) < 1 || round(result(1)) > filas) && ...
       !(round(result(2)) < 1 || round(result(2)) > columnas)
@@ -190,35 +160,16 @@ MatrizReferencias = [FilaPuntoD_4, ColumnaPuntoD_4;
 MHomografia = GenerarHomografia(MatrizOriginal, MatrizReferencias);
 MHomografia = inv(MHomografia);
 
-%{
-Punto1 = MHomografia * [1, 1, 1]';
-Punto1 = Punto1 / Punto1(3);
-Punto2 = MHomografia * [1, columnas, 1]';
-Punto2 = Punto2 / Punto2(3);
-Punto3 = MHomografia * [filas, 1, 1]';
-Punto3 = Punto3 / Punto3(3);
-Punto4 = MHomografia * [filas, columnas, 1]';
-Punto4 = Punto4 / Punto4(3);
-
-minCoord = [max(Punto1(1),Punto2(1)) max(Punto1(2), Punto3(2))];
-maxCoord = [min(Punto4(1),Punto3(1)) min(Punto4(2), Punto2(2))];
-
-relCoords = [filas columnas] ./ (maxCoord - minCoord);
-%}
-
 for i = [1:filas]
   for j = [1:columnas*3]
 
     result = MHomografia * [i, j, 1]';
     result = result / result(3);
-    
-    %result(2) = result(2) - columnas;
-    %result = ((result  - [minCoord 1]').* [relCoords 1]');
-    
-    if !(round(result(1)) < 1 || round(result(1)) > filas) && ...
-      !(round(result(2)) < 1 || round(result(2)) > columnas)
+
+    if !(round(result(1))+50 < 1 || round(result(1))+50 > filas) && ...
+      !(round(result(2))-20 < 1 || round(result(2))-20 > columnas)
       for k = [1:color]
-        resultImage(i, j + columnas, k) = imgDch(round(result(1)), round(result(2)), k);
+        resultImage(i, j + columnas, k) = imgDch(round(result(1))+50, round(result(2))-20, k);
       end
     endif
   end
