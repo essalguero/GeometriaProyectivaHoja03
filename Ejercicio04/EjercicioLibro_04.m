@@ -103,7 +103,7 @@ mCor = [0, 0, 0, 1;
 homografia = GenerarHomografiaControl(PuntosTriangulacion(1:5,:), mCor);
 
 %Puntos de reconstrucción métrica
-XE = homografia * X'
+XE = homografia * PuntosTriangulacion'
 
 %Dibujar la reconstrucción métrica
 figure
